@@ -21,8 +21,7 @@ In this tutorial, we will be observing various network traffic to and from Azure
 - Windows 10 (21H2)
 - Ubuntu Server 20.04
 
-<h2>Actions and Observations</h2>
-
+<h2>Testing Connectivity Between Hosts</h2>
 <p>
 </p>
 <p>
@@ -35,7 +34,7 @@ On our Windows machine we will download Wireshark to see the actual live traffic
 <img src="https://i.imgur.com/VZS81An.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
 <p>
-Once installed open Wireshark and filter for ICMP Traffic only. ICMP is a network layer protocol that relays messages concerning network connection issues. Ping uses this protocol (ping tests connectivity between hosts). When we filter wirehsark to only capture ICMP packets and ping the private IP address of our linux machine we can visually see the packets on wireshark.
+Once installed open Wireshark and filter for Internet Control Message Protocol (ICMP) Traffic only. ICMP is a network layer protocol that relays messages concerning network connection issues. Ping uses this protocol (ping tests connectivity between hosts). When we filter wirehsark to only capture ICMP packets and ping the private IP address of our linux machine we can visually see the packets on wireshark.
 </p>
 <br />
 <p>
@@ -68,26 +67,28 @@ Next we will use our Windows machine to Secure Shell (SSH) to our Linux machine.
 <img src="https://i.imgur.com/zkw58Q5.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <p>
 We will set the wireshark filter to capture SSH packets only. When we SSH into the Linux machine with the command prompt "ssh labuser@10.0.0.5" we can see that wireshark starts to immediately capture SSH packets. We can use commands like "uname -a" to tell us about the operating system (OS) running. or "ls -lasth" to list folders and files in the current directory and much more
+<h2>Requesting new IP address using DHCP</h2>
 </p>
 <br />
-<img src="https://i.imgur.com/zteR41r.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+Now we will use wireshark to filter for Dynamic Host Configuration Protocol (DHCP) this works on ports 67/68, it is used to assign IP addresses to machines. We will request a new ip address with the command "ipconfig /renew". Once we enter the command wireshark will capture DHCP traffic.
+</p>
+<br />
+<img src="https://i.imgur.com/sf85UL7.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
 <p>
-Now we will use wireshark to filter for DHCP. DHCP is the Dynamic Host Configuration Protocol this works on ports 67/68. It is used to assign IP addresses to machines. We will request a new ip address with the command "ipconfig /renew". Once we enter the command wireshark will capture DHCP traffic.
+<h2>Finding Webpage IP Address</h2>
+We can also filter by Domain Name System (DNS) "nslookup" traffic. We will set wireshark to filter DNS traffic. 
 </p>
 <br />
-<img src="https://i.imgur.com/vU8fpQf.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://i.imgur.com/G3Udqw8.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
 <p>
-Time to filter DNS traffic. We will set wireshark to filter DNS traffic. We will initiate DNS traffic by typing in the command "nslookup www.google.com" this command essentially asks our DNS server what is google's IP address.
-</p>
-<br />
-<img src="https://i.imgur.com/VMcwmsO.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
+We will initiate DNS traffic by typing in the command "nslookup www.google.com" this command essentially asks our DNS server what is google's IP address.
 <p>
-Lastly we will filter for RDP traffic. When we enter tcp.port==3389 traffic is spammed non stop because we are using Remote Desktop Protocol to connect to our Virtual Machine. 
+<h2>Filtering by RDP Traffic</h2>
+Lastly we will filter for Remote Desktop Protocol (RDP) traffic. When we enter tcp.port==3389 traffic is spammed non stop because we are using Remote Desktop Protocol to connect to our Virtual Machine. 
 </p>
 <br />
-<img src="https://i.imgur.com/VxXGv6X.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://i.imgur.com/Q3i1qeo.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
 <p>
