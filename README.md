@@ -3,14 +3,14 @@
 </p>
 
 <h1>Network Security Groups (NSGs) and Inspecting Traffic Between Azure Virtual Machines</h1>
-In this tutorial, we observe various network traffic to and from Azure Virtual Machines with Wireshark as well as experiment with Network Security Groups. <br />
+In this tutorial, we will be observing various network traffic to and from Azure Virtual Machines with Wireshark as well as experiment with Network Security Groups. <br />
 
 
 
 
 <h2>Environments and Technologies Used</h2>
 
-- Microsoft Azure (Virtual Machines)
+- Microsoft Azure [Virtual Machines (VM]
 - Remote Desktop
 - Various Command-Line Tools
 - Various Network Protocols (SSH, RDH, DNS, HTTP/S, ICMP)
@@ -26,28 +26,48 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 <p>
 </p>
 <p>
-Welcome to my tutorial on Network Security Groups and Inspecting Network Protocols. First you will need to create two VMs on Azure. One machine will be a Linux machine and the other will be a Windows 10 machine. Both will have two cpus and they must be on the same VNET. Once that is done go on the Windows machine and download Wireshark. I will attatch a link to the wireshark download. https://www.wireshark.org/download.html Once installed open Wireshark and filter for ICMP Traffic only. ICMP is a network layer protocol that relays messages concerning network connection issues. Ping uses this protocol, ping tests connectivity between hosts. When we filter wirehsark to only capture ICMP packets and ping the private IP address of our linux machine we can visually see the packets on wireshark. 
+Welcome to my tutorial on Network Security Groups and Inspecting Network Protocols. To start off we will create two VMs on Azure. One machine will be running on Linux while the other will be running on Windows 10. Both will be running on the same VNet. 
+</p>
+On our Windows machine we will download Wireshark to see the actual live traffic that is happening on our virtual machine. Wireshark download Link: https://www.wireshark.org/download.html  
 </p>
 <br />
 <p>
-<img src="https://i.imgur.com/IIUShxp.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://i.imgur.com/VZS81An.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
 <p>
-We can inspect each individual packet and see the actual data that is being sent in each ping. the picture below demonstrates just that. 
+Once installed open Wireshark and filter for ICMP Traffic only. ICMP is a network layer protocol that relays messages concerning network connection issues. Ping uses this protocol (ping tests connectivity between hosts). When we filter wirehsark to only capture ICMP packets and ping the private IP address of our linux machine we can visually see the packets on wireshark.
 </p>
 <br />
 <p>
-<img src="https://i.imgur.com/GLxSIG3.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://i.imgur.com/K7Ql4T0.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+</p>
+<p>  
+We can also inspect individual packets and see the actual data that is being sent in each ping. 
+</p>
+<p> 
+<h2>Blocking inbound IMCP Traffic Using a Firewall</h2>
+<p>
 </p>
 <p>
-In the next portion of the lab we will perpetually ping the Linux machine with the command ping -t. This will continually ping the machine until we decide to stop it, while the Windows machine is pinging the Linux machine we will go to the Linux machine and block inbound ICMP traffic on it's firewall. Once we do that we will stop recieving echo replys from the Linux machine. We will block ICMP by creating a new Network Security Group on the Linux machine that will be set to block ICMP. We can allow the traffic by allowing ICMP on the Linux Network Security Groups page on Azure. 
+<img src="https://i.imgur.com/RDFOlPM.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
-<br />
-<img src="https://i.imgur.com/5vXO75R.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<img src="https://i.imgur.com/Asl80tN.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+Next we will perpetually ping the Linux machine with the command ping -t on powershell on our Windows VM. This will continually ping the machine until we decide to stop it. 
 <p>
-Next we will use our Windows machine to SSH to the Linux machine. SSH has no GUI it just gives the user access to the machines CLI. We will set the wireshark filter to capture SSH packets only. When we ssh into the Linux machine with the command prompt "ssh labuser@10.0.0.5" we can see that wireshark starts to immediately capture SSH packets.
+<img src="https://i.imgur.com/51kTugI.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<p>
+On our Linix machine we will block inbound ICMP traffic on it's firewall. We will block ICMP by creating a new Network Security Group on the Linux machine that will be set to block ICMP.
+</p>
+<img src="https://i.imgur.com/vcEweiE.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<p>  
+Once we do that we will stop recieving echo replys from the Linux machine on our Windows machine.
+  
+<h2>Exploring SSH Traffic</h2>
+
+Next we will use our Windows machine to Secure Shell (SSH) to our Linux machine. SSH is often used to "login" and perform operations on remote computers but it may also be used for transferring data. SSH has no graphical user interface (GUI) it just gives the user access to the machines command-line interface (CLI). 
+<p>
+<img src="https://i.imgur.com/zkw58Q5.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<p>
+We will set the wireshark filter to capture SSH packets only. When we SSH into the Linux machine with the command prompt "ssh labuser@10.0.0.5" we can see that wireshark starts to immediately capture SSH packets. We can use commands like "uname -a" to tell us about the operating system (OS) running. or "ls -lasth" to list folders and files in the current directory and much more
 </p>
 <br />
 <img src="https://i.imgur.com/zteR41r.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
